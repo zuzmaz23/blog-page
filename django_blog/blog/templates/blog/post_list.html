@@ -1,0 +1,79 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1><i class="fas fa-feather-alt me-2"></i>Ostatnie posty</h1>
+            <span class="post-count-badge">
+                <i class="fas fa-file-alt"></i>{{ posts|length }} postów
+            </span>
+        </div>
+
+        {% for post in posts %}
+            <article class="blog-post card mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h2 class="card-title h4">
+                            <a href="{% url 'post_detail' pk=post.pk %}" class="text-decoration-none text-dark">{{ post.title }}</a>
+                        </h2>
+                        <span class="badge bg-light text-dark"><i class="far fa-clock me-1"></i>{{ post.published_date|date:"d M Y"}}</span>
+                    </div>
+
+                    <p class="card-text">{{ post.content|striptags|truncatewords:30 }}</p>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            <span class="text-muted me-3"><i class="far fa-user me-1"></i>{{ post.author }}</span>
+                            <span class="text-muted me-3"><i class="far fa-comment me-1"></i>{{ post.comments.count }}</span>
+                            <span class="text-muted"><i class="far fa-heart me-1"></i>{{ post.likes.count }}</span>
+                        </div>
+                        <a href="{% url 'post_detail' pk=post.pk %}" class="btn btn-sm btn-outline-primary">Czytaj więcej</a>
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <div class="text-center py-5">
+                <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                <h3 class="text-muted">Brak postów</h3>
+                <p class="text-muted">Bądź pierszym, który doda post!</p>
+                {% if user.is_authenticated %}
+                    <a href="#" class="btn btn-primary mt-2">Dodaj pierwszy post</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="col-lg-4">
+        <div class="sidebar-card mb-4">
+            <div class="card-body">
+                <h5 class="sidebar-title">
+                    <i class="fas fa-info-circle"></i>O blogu
+                </h5>
+                <p class="sidebar-text">Witaj na moim blogu! Tutaj dzielę się swoimi przemyśleniami, i odkryciami z świata programowania.</p>
+            </div>
+        </div>
+        <div class="sidebar-card">
+            <div class="card-body">
+                <h5 class="sidebar-title">
+                    <i class="fas fa-fire"></i>Popularne tagi
+                </h5>
+                <div class="tags-container">
+                    <span class="tag-badge">Django</span>
+                    <span class="tag-badge">Python</span>
+                    <span class="tag-badge">Web Dev</span>
+                    <span class="tag-badge">Bootstrap</span>
+                    <span class="tag-badge">Docker</span>
+                    <span class="tag-badge">PostgreSQL</span>
+                    <span class="tag-badge">JavaScript</span>
+                    <span class="tag-badge">HTML</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+{% endblock %}
